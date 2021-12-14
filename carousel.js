@@ -1,40 +1,48 @@
 import { css, html, LitElement } from 'lit-element';
-import { LocalizeDynamicMixin } from '@brightspace-ui/core/mixins/localize-dynamic-mixin.js';
 
-class Carousel extends LocalizeDynamicMixin(LitElement) {
-
-	static get properties() {
-		return {
-			prop1: { type: String },
-		};
-	}
+class Carousel extends LitElement {
 
 	static get styles() {
 		return css`
 			:host {
-				display: inline-block;
+				display: block;
 			}
 			:host([hidden]) {
 				display: none;
 			}
+			.d2l-button-left {
+				margin: auto 0;
+			}
+			.d2l-button-right {
+				margin: auto 0;
+			}
+			.d2l-card-carousel {
+				justify-content: space-around;
+				width: 100%;
+			}
+			.d2l-carousel {
+				display: flex;
+				justify-content: space-between;
+			}
 		`;
-	}
-
-	constructor() {
-		super();
-
-		this.prop1 = 'carousel';
-	}
-
-	static get localizeConfig() {
-		return {
-			importFunc: async lang => (await import(`./lang/${lang}.js`)).default
-		};
 	}
 
 	render() {
 		return html`
-			<h2>${this.localize('hello')} ${this.prop1}!</h2>
+			<slot name="header"></slot>
+			<div class="d2l-carousel">
+				<div class="d2l-button-left">
+					<slot name="left"></slot>
+				</div>
+
+				<div class="d2l-card-carousel">
+					<slot name="carousel"></slot>
+				</div>
+
+				<div class="d2l-button-right">
+					<slot name="right"></slot>
+				</div>
+			</div>
 		`;
 	}
 

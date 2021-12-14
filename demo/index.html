@@ -5,6 +5,7 @@
 		<script type="module">
 			import '@brightspace-ui/core/components/demo/demo-page.js';
 			import '../carousel.js';
+			import '../carousel-demo.js';
 		</script>
 		<title>Carousel</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,10 +13,13 @@
 	</head>
 	<body>
 		<d2l-demo-page page-title="Carousel">
-			<h2>Carousel</h2>
+			<h2>Carousel Demo</h2>
 			<d2l-demo-snippet>
-				<d2l-labs-carousel></d2l-labs-carousel>
+				<d2l-labs-carousel-demo></d2l-labs-carousel-demo>
 			</d2l-demo-snippet>
+
+			<d2l-labs-carousel-demo></d2l-labs-carousel-demo>
+			<!-- ^That was added because it is hard show the dynamic sizing within a demo-snippet -->
 		</d2l-demo-page>
 	</body>
 </html>
