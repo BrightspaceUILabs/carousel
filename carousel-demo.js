@@ -64,8 +64,8 @@ class CarouselDemo extends LitElement {
 		return html`
 			<d2l-labs-carousel>
 				<div slot="header">Recently Updated Courses</div>
-				<d2l-button-icon icon="tier1:chevron-left" slot="left" @click="${this._onLeftClick}"></d2l-button-icon>
-				<d2l-button-icon icon="tier1:chevron-right" slot="right" @click="${this._onRightClick}"></d2l-button-icon>
+				<d2l-button-icon icon="tier1:chevron-left" slot="left" @click="${this._onLeftClick}" ?disabled=${this._isFirstCard()}></d2l-button-icon>
+				<d2l-button-icon icon="tier1:chevron-right" slot="right" @click="${this._onRightClick}" ?disabled=${this._isLastCard()}></d2l-button-icon>
 				<div class="card-carousel" slot="carousel">
 					${showCourses.map(course => html`
 						<d2l-card align-center text="${course}">
@@ -94,6 +94,14 @@ class CarouselDemo extends LitElement {
 		if (changedProperties.has('_cardsPerPage')) {
 			this.requestUpdate();
 		}
+	}
+
+	_isFirstCard() {
+		return this._courseIndex === 0;
+	}
+
+	_isLastCard() {
+		return this._courseIndex + this._cardsPerPage >= this.courses.length;
 	}
 
 	_onLeftClick() {
