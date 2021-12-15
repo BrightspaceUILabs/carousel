@@ -3,6 +3,7 @@ import '@brightspace-ui/core/components/button/button-icon.js';
 import '@brightspace-ui/core/components/card/card.js';
 import '@brightspace-ui/core/components/card/card-content-title.js';
 import '@brightspace-ui/core/components/card/card-footer-link.js';
+import '@brightspace-ui/core/components/link/link.js';
 import { css, html, LitElement } from 'lit-element';
 
 class CarouselDemo extends LitElement {
@@ -20,6 +21,7 @@ class CarouselDemo extends LitElement {
 		return css`
 			:host {
 				display: block;
+				padding: 1rem;
 			}
 			:host([hidden]) {
 				display: none;
@@ -31,11 +33,23 @@ class CarouselDemo extends LitElement {
 			.d2l-card-image {
 				display: block;
 				width: 100%;
+				height: 120px;
 			}
 			d2l-card {
-				margin: 0.5rem;
 				max-width: 230px;
 				min-width: 180px;
+			}
+
+			@media (max-width: 767px) {
+				d2l-card {
+					max-width: 200px;
+					min-width: 130px;
+				}
+				.d2l-card-image {
+					display: block;
+					width: 100%;
+					height: 60px;
+				}
 			}
 		`;
 	}
@@ -64,6 +78,7 @@ class CarouselDemo extends LitElement {
 		return html`
 			<d2l-labs-carousel>
 				<div slot="header">Recently Updated Courses</div>
+				<d2l-link slot="link">View More</d2l-link>
 				<d2l-button-icon icon="tier1:chevron-left" slot="left" @click="${this._onLeftClick}" ?disabled=${this._isFirstCard()}></d2l-button-icon>
 				<d2l-button-icon icon="tier1:chevron-right" slot="right" @click="${this._onRightClick}" ?disabled=${this._isLastCard()}></d2l-button-icon>
 				<div class="card-carousel" slot="carousel">
@@ -117,11 +132,16 @@ class CarouselDemo extends LitElement {
 	}
 
 	_setCardCount() {
-		// const width = window.innerWidth;
-		// Width could come in handy if we shrink the size of the course cards for smaller screens/devices
-
+		const width = window.innerWidth;
 		const carousel = this.shadowRoot.querySelector('d2l-labs-carousel');
-		const cardsAmount = Math.max(1, Math.floor((carousel.clientWidth - 82) / 200)); // Minus 82 represents the two buttons
+		let cardsAmount = 0;
+
+		if (width <= 767) {
+			cardsAmount = Math.max(1, Math.floor(carousel.clientWidth / 135)); // Minus 82 represents the two buttons
+		} else {
+			cardsAmount = Math.max(1, Math.floor(carousel.clientWidth / 185)); // Minus 82 represents the two buttons
+		}
+
 		this._cardsPerPage = Math.min(cardsAmount, this._cardLimit);
 	}
 }
