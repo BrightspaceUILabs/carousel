@@ -1,9 +1,7 @@
 import './carousel.js';
-import '@brightspace-ui/core/components/button/button-icon.js';
 import '@brightspace-ui/core/components/card/card.js';
 import '@brightspace-ui/core/components/card/card-content-title.js';
 import '@brightspace-ui/core/components/card/card-footer-link.js';
-import '@brightspace-ui/core/components/link/link.js';
 import { css, html, LitElement } from 'lit-element';
 
 class CarouselDemo extends LitElement {
@@ -36,8 +34,15 @@ class CarouselDemo extends LitElement {
 				height: 120px;
 			}
 			d2l-card {
+				margin: 0.25rem;
 				max-width: 230px;
 				min-width: 180px;
+			}
+			.d2l-header {
+				margin-left: 0.25rem;
+			}
+			d2l-link {
+				margin-right: 0.25rem;
 			}
 
 			@media (max-width: 767px) {
@@ -76,11 +81,8 @@ class CarouselDemo extends LitElement {
 	render() {
 		const showCourses = this.courses.slice(this._courseIndex, this._courseIndex + this._cardsPerPage);
 		return html`
-			<d2l-labs-carousel>
-				<div slot="header">Recently Updated Courses</div>
-				<d2l-link slot="link">View More</d2l-link>
-				<d2l-button-icon icon="tier1:chevron-left" slot="left" @click="${this._onLeftClick}" ?disabled=${this._isFirstCard()}></d2l-button-icon>
-				<d2l-button-icon icon="tier1:chevron-right" slot="right" @click="${this._onRightClick}" ?disabled=${this._isLastCard()}></d2l-button-icon>
+			<d2l-labs-carousel .carouselSize="${this.courses.length}" .itemsPerSet="${this._cardsPerPage}" .itemIndex="${this._courseIndex}"
+				@d2l-carousel-previous=${this._onPreviousSet} @d2l-carousel-next=${this._onNextSet}>
 				<div class="card-carousel" slot="carousel">
 					${showCourses.map(course => html`
 						<d2l-card align-center text="${course}">
@@ -111,20 +113,14 @@ class CarouselDemo extends LitElement {
 		}
 	}
 
-	_isFirstCard() {
-		return this._courseIndex === 0;
-	}
-
-	_isLastCard() {
-		return this._courseIndex + this._cardsPerPage >= this.courses.length;
-	}
-
-	_onLeftClick() {
-		this._courseIndex = Math.max(this._courseIndex - this._cardsPerPage, 0);
-	}
-
-	_onRightClick() {
+	_onNextSet() {
 		this._courseIndex = Math.min(this._courseIndex + this._cardsPerPage, this.courses.length - 1);
+		this.requestUpdate();
+	}
+
+	_onPreviousSet() {
+		this._courseIndex = Math.max(this._courseIndex - this._cardsPerPage, 0);
+		this.requestUpdate();
 	}
 
 	_onWindowResize() {
@@ -137,9 +133,9 @@ class CarouselDemo extends LitElement {
 		let cardsAmount = 0;
 
 		if (width <= 767) {
-			cardsAmount = Math.max(1, Math.floor(carousel.clientWidth / 135)); // Minus 82 represents the two buttons
+			cardsAmount = Math.max(1, Math.floor(carousel.clientWidth / 140));
 		} else {
-			cardsAmount = Math.max(1, Math.floor(carousel.clientWidth / 185)); // Minus 82 represents the two buttons
+			cardsAmount = Math.max(1, Math.floor(carousel.clientWidth / 190));
 		}
 
 		this._cardsPerPage = Math.min(cardsAmount, this._cardLimit);

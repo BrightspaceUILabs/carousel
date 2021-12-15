@@ -1,6 +1,15 @@
+import '@brightspace-ui/core/components/button/button-icon.js';
 import { css, html, LitElement } from 'lit-element';
 
 class Carousel extends LitElement {
+
+	static get properties() {
+		return {
+			carouselSize: { type: Number, attribute: 'carousel-size' },
+			itemsPerSet: { type: Number, attribute: 'items-per-set' },
+			itemIndex: { type: Number, attribute: 'item-index' }
+		};
+	}
 
 	static get styles() {
 		return css`
@@ -12,11 +21,11 @@ class Carousel extends LitElement {
 			}
 			.d2l-button-left {
 				margin: auto 0;
-				left: calc(-42px - 3px);
+				left: -42px;
 			}
 			.d2l-button-right {
 				margin: auto 0;
-				right: calc(-42px - 3px);
+				right: -42px;
 			}
 			.d2l-card-carousel {
 				justify-content: space-around;
@@ -40,15 +49,18 @@ class Carousel extends LitElement {
 		`;
 	}
 
+	constructor() {
+		super();
+		this.itemIndex = 0;
+		this.itemsPerSet = 0;
+		this.carouselSize = 0;
+	}
+
 	render() {
 		return html`
-			<div class="d2l-header-container">
-				<slot name="header"></slot>
-				<slot name="link"></slot>
-			</div>
 			<div class="d2l-carousel">
 				<div class="d2l-button-left d2l-button-container">
-					<slot name="left"></slot>
+				<d2l-button-icon icon="tier1:chevron-left" @click="${this._onPreviousClick}" ?disabled=${this._isFirstCard()}></d2l-button-icon>
 				</div>
 
 				<div class="d2l-card-carousel">
@@ -56,11 +68,32 @@ class Carousel extends LitElement {
 				</div>
 
 				<div class="d2l-button-right d2l-button-container">
-					<slot name="right"></slot>
+				<d2l-button-icon icon="tier1:chevron-right" @click="${this._onNextClick}" ?disabled=${this._isLastCard()}></d2l-button-icon>
 				</div>
 			</div>
 		`;
 	}
 
+	_isFirstCard() {
+		return this.itemIndex === 0;
+	}
+
+	_isLastCard() {
+		return this.itemIndex + this.itemsPerSet >= this.carouselSize;
+	}
+
+	_onNextClick() {
+		this.dispatchEvent(new CustomEvent('d2l-carousel-next', {
+			bubbles: true,
+			composed: true
+		}));
+	}
+
+	_onPreviousClick() {
+		this.dispatchEvent(new CustomEvent('d2l-carousel-previous', {
+			bubbles: true,
+			composed: true
+		}));
+	}
 }
 customElements.define('d2l-labs-carousel', Carousel);
