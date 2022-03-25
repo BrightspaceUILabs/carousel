@@ -1,7 +1,6 @@
 import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { LocalizeDynamicMixin } from '@brightspace-ui/core/mixins/localize-dynamic-mixin.js';
 
-class Carousel extends LocalizeDynamicMixin(LitElement) {
+class Carousel extends LitElement {
 
 	static get properties() {
 		return {
@@ -26,15 +25,9 @@ class Carousel extends LocalizeDynamicMixin(LitElement) {
 		this.prop1 = 'carousel';
 	}
 
-	static get localizeConfig() {
-		return {
-			importFunc: async lang => (await import(`./lang/${lang}.js`)).default
-		};
-	}
-
 	render() {
 		return html`
-			<h2>${this.localize('hello')} ${this.prop1}!</h2>
+			<h2>${this.prop1}!</h2>
 		`;
 	}
 

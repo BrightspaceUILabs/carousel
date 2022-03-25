@@ -33,8 +33,7 @@
     "stylelint": "^14"
   },
   "files": [
-    "carousel.js",
-    "/lang"
+    "carousel.js"
   ],
   "publishConfig": {
     "access": "public"
